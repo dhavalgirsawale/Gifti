@@ -1,11 +1,11 @@
-let yesButton = document.getElementById("yesButton");
-let noButton = document.getElementById("noButton");
+const yesButton = document.getElementById("yesButton");
+const noButton = document.getElementById("noButton");
 
 let yesScale = 1;
 let noCount = 0;
-let maxNo = 10;
+const maxNo = 10;
 
-let noMessages = [
+const noMessages = [
     "Are you sure? 🥺",
     "Think again 😏",
     "Nope 😈",
@@ -15,21 +15,18 @@ let noMessages = [
     "Wrong choice 😬",
     "Just say yes 😌",
     "Why fighting it? 😏",
-    "Okay this is getting awkward 😵"
+    "Okay this is awkward 😵"
 ];
 
 function nextPage() {
-    // 💥 Explosion vibration on YES
     if (navigator.vibrate) {
         navigator.vibrate([200, 100, 200, 100, 300]);
     }
 
-    // 💖 Heart explosion
     for (let i = 0; i < 25; i++) {
         createHeart();
     }
 
-    // Delay page change so animation is visible
     setTimeout(() => {
         window.location.href = "yes.html";
     }, 800);
@@ -37,40 +34,44 @@ function nextPage() {
 
 function moveButton() {
     if (noCount >= maxNo) {
-        noButton.innerText = "Okay fine… YES 😳";
-        noButton.style.display = "none";
+        noButton.innerText = "NO is disabled 😌";
+        noButton.disabled = true;
+        noButton.style.cursor = "default";
         return;
     }
 
     noCount++;
 
-    // 📳 Vibration on NO
     if (navigator.vibrate) {
         navigator.vibrate([100, 50, 100]);
     }
 
-    // 😵 Shake screen
     document.body.classList.add("shake");
     setTimeout(() => {
         document.body.classList.remove("shake");
     }, 400);
 
-    // 🏃 Move NO button
-    let x = Math.random() * (window.innerWidth - noButton.offsetWidth);
-    let y = Math.random() * (window.innerHeight - noButton.offsetHeight);
+    // Keep NO button inside viewport
+    const padding = 20;
+    const maxX = window.innerWidth - noButton.offsetWidth - padding;
+    const maxY = window.innerHeight - noButton.offsetHeight - padding;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
     noButton.style.position = "absolute";
     noButton.style.left = `${x}px`;
     noButton.style.top = `${y}px`;
 
-    // 🟢 Grow YES button
-    yesScale += 0.12;
+    // YES grows every NO
+    yesScale += 0.15;
     yesButton.style.transform = `scale(${yesScale})`;
 
-    // 🔴 Change NO text
-    noButton.innerText = noMessages[Math.min(noCount - 1, noMessages.length - 1)];
+    // Update NO text
+    noButton.innerText =
+        noMessages[Math.min(noCount - 1, noMessages.length - 1)];
 }
 
-// 💖 Create floating hearts
 function createHeart() {
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -81,7 +82,5 @@ function createHeart() {
 
     document.body.appendChild(heart);
 
-    setTimeout(() => {
-        heart.remove();
-    }, 1500);
+    setTimeout(() => heart.remove(), 1500);
 }
