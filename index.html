@@ -1,123 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Be My Valentine 💖</title>
+<meta charset="UTF-8" />
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Be My Valentine 💖</title>
 
-    <link rel="stylesheet" href="./Styles/styles.css">
-    <script src="./script.js" defer></script>
+<script src="./script.js" defer></script>
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background: #fff5f8;
-            overflow: hidden;
-        }
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #fff5f8;
+    overflow: hidden;
+}
 
-        .container {
-            text-align: center;
-            margin-top: 50px;
-        }
+.container {
+    text-align: center;
+    margin-top: 50px;
+}
 
-        .header_text {
-            font-size: 2.5rem;
-            color: #ff4d6d;
-        }
+.header_text {
+    font-size: 2.2rem;
+    color: #ff4d6d;
+    padding: 0 15px;
+}
 
-        .gif_container img {
-            width: 280px;
-            margin: 20px 0;
-        }
+.gif_container img {
+    width: 260px;
+    margin: 20px 0;
+}
 
-        .buttons {
-            margin-top: 20px;
-            position: relative;
-        }
+.buttons {
+    margin-top: 20px;
+}
 
-        .btn {
-            padding: 12px 28px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            margin: 10px;
-        }
+.btn {
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 10px;
+}
 
-        #yesButton {
-            background-color: #ff4d6d;
-            color: white;
-            transition: transform 0.3s ease;
-        }
+#yesButton {
+    background-color: #ff4d6d;
+    color: white;
+    transition: transform 0.3s ease;
+}
 
-        #noButton {
-            background-color: #ccc;
-            color: black;
-            position: relative;
-        }
+#noButton {
+    background-color: #ccc;
+    color: black;
+}
 
-        /* Shake animation */
-        @keyframes shake {
-            0% { transform: translate(0); }
-            20% { transform: translate(-8px, 8px); }
-            40% { transform: translate(8px, -8px); }
-            60% { transform: translate(-8px, -8px); }
-            80% { transform: translate(8px, 8px); }
-            100% { transform: translate(0); }
-        }
+@keyframes shake {
+    0% { transform: translate(0); }
+    25% { transform: translate(-6px, 6px); }
+    50% { transform: translate(6px, -6px); }
+    75% { transform: translate(-6px, -6px); }
+    100% { transform: translate(0); }
+}
 
-        .shake {
-            animation: shake 0.4s;
-        }
+.shake {
+    animation: shake 0.4s;
+}
 
-        /* Heart animation */
-        .heart {
-            position: fixed;
-            font-size: 24px;
-            animation: floatUp 1.5s ease-out forwards;
-            pointer-events: none;
-        }
+.heart {
+    position: fixed;
+    font-size: 24px;
+    animation: floatUp 1.5s ease-out forwards;
+    pointer-events: none;
+}
 
-        @keyframes floatUp {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-120px) scale(1.5);
-            }
-        }
+@keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-120px) scale(1.5); }
+}
 
-        .made-with-love {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #777;
-            font-size: 0.9rem;
-        }
-    </style>
+#musicToggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.made-with-love {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    color: #777;
+}
+</style>
 </head>
 
 <body>
-    <div class="container">
-        <h1 class="header_text">Will you be my valentine? radha 💕</h1>
 
-        <div class="gif_container">
-            <img src="https://64.media.tumblr.com/44437aaa3af65ef5b5dc25b2cf1e81d1/6acc7d78ea83e207-45/s400x600/5b30035952803850ed3136fbe760ceff97ee8d19.gif" alt="Cute gif">
-        </div>
+<div class="container">
+    <h1 class="header_text">Will you be my valentine? Radha 💕</h1>
 
-        <div class="buttons">
-            <button class="btn" id="yesButton" onclick="nextPage()">Yes</button>
-            <button class="btn" id="noButton" onclick="moveButton()">No</button>
-        </div>
+    <div class="gif_container">
+        <img src="https://64.media.tumblr.com/44437aaa3af65ef5b5dc25b2cf1e81d1/6acc7d78ea83e207-45/s400x600/5b30035952803850ed3136fbe760ceff97ee8d19.gif">
     </div>
 
-    <p class="made-with-love">
-        Made with love and chaos by Dhaval 💖✨
-    </p>
+    <div class="buttons">
+        <button class="btn" id="yesButton" onclick="nextPage()">Yes</button>
+        <button class="btn" id="noButton" onclick="moveButton()">No</button>
+    </div>
+</div>
+
+<p class="made-with-love">
+Made with love and chaos by Dhaval 💖✨
+</p>
+
+<audio id="bgMusic" loop>
+    <source src="perfect.mp3" type="audio/mpeg">
+</audio>
+
+<div id="musicToggle">🔇</div>
+
 </body>
 </html>
