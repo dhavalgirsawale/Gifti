@@ -1,26 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./Styles/yes.css">
-    <!-- Include any additional stylesheets or meta tags here -->
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Hoorayy 💖</title>
+
+<script src="./script.js" defer></script>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background: #fff5f8;
+    font-family: Arial;
+    text-align: center;
+}
+
+.container {
+    margin-top: 70px;
+}
+
+.header_text {
+    font-size: 2.5rem;
+    color: #ff4d6d;
+}
+
+.gif_container img {
+    width: 280px;
+}
+
+.text {
+    font-size: 1.2rem;
+}
+
+#musicToggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1000;
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <div>
-            <h1 class="header_text">Hoorayy!!!</h1>
-        </div>
-        <div class="gif_container">
-            <img src="https://i.gifer.com/Pak.gif" alt="Cute animated illustration" style="margin-top: -60px;">
-        </div>
-        <!-- Adjusted position of the text element by 100px -->
-        <p class="text" style="margin-top: -30px;">You're now Dhaval's gf</p>
+
+<div class="container">
+    <h1 class="header_text">Hoorayy!!! 💕</h1>
+
+    <div class="gif_container">
+        <img src="https://i.gifer.com/Pak.gif">
     </div>
 
-    <!-- Note: Positioned at the bottom near the footbar -->
-    <p style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); text-align: center; color: #777;">Congratulations on this special moment! 💑💖</p>
+    <p class="text">You're now Dhaval's gf 💖</p>
+</div>
 
-    <!-- Include any external scripts if needed -->
+<p style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); color: #777;">
+Congratulations on this special moment! 💑💖
+</p>
+
+<audio id="bgMusic" loop>
+    <source src="perfect.mp3" type="audio/mpeg">
+</audio>
+
+<div id="musicToggle">🔊</div>
+
 </body>
 </html>
