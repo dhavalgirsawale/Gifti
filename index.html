@@ -1,155 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Be My Valentine 💖</title>
 
-<script src="./script.js" defer></script>
-
 <style>
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background: #fff5f8;
-    overflow: hidden;
+body{
+  margin:0;
+  font-family:Arial;
+  background:#fff5f8;
+  text-align:center;
+  overflow:hidden;
 }
 
-.container {
-    text-align: center;
-    margin-top: 50px;
+/* Pages */
+.page{
+  position:absolute;
+  width:100%;
+  top:0;
+  left:0;
+  padding-top:70px;
+  opacity:0;
+  transition:opacity 1s ease;
 }
 
-.header_text {
-    font-size: 2.2rem;
-    color: #ff4d6d;
-    padding: 0 15px;
+.active{
+  opacity:1;
+  z-index:1;
 }
 
-.gif_container img {
-    width: 260px;
-    margin: 20px 0;
+/* Buttons */
+.btn{
+  padding:12px 28px;
+  font-size:1.1rem;
+  border:none;
+  border-radius:30px;
+  margin:10px;
+  cursor:pointer;
+  transition:transform .3s;
 }
 
-.buttons {
-    margin-top: 20px;
+#yesButton{
+  background:#ff4d6d;
+  color:white;
 }
 
-.btn {
-    padding: 12px 28px;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    margin: 10px;
+#noButton{
+  background:#ccc;
 }
 
-#yesButton {
-    background-color: #ff4d6d;
-    color: white;
-    transition: transform 0.3s ease;
+/* Music button */
+#musicToggle{
+  position:fixed;
+  top:15px;
+  right:15px;
+  font-size:28px;
+  cursor:pointer;
+  z-index:1000;
 }
 
-#noButton {
-    background-color: #ccc;
-    color: black;
+.glow{
+  animation:glowPulse 1.5s infinite;
 }
 
-@keyframes shake {
-    0% { transform: translate(0); }
-    25% { transform: translate(-6px, 6px); }
-    50% { transform: translate(6px, -6px); }
-    75% { transform: translate(-6px, -6px); }
-    100% { transform: translate(0); }
+@keyframes glowPulse{
+  0%{box-shadow:0 0 5px #ff4da6;}
+  50%{box-shadow:0 0 20px #ff4da6;}
+  100%{box-shadow:0 0 5px #ff4da6;}
 }
 
-.shake {
-    animation: shake 0.4s;
+/* Hearts */
+.heart{
+  position:fixed;
+  color:#ff4d6d;
+  font-size:20px;
+  animation:floatUp 3s linear forwards;
 }
 
-.heart {
-    position: fixed;
-    font-size: 24px;
-    animation: floatUp 1.5s ease-out forwards;
-    pointer-events: none;
+@keyframes floatUp{
+  0%{transform:translateY(0); opacity:1;}
+  100%{transform:translateY(-100vh); opacity:0;}
 }
 
-@keyframes floatUp {
-    0% { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-120px) scale(1.5); }
+/* Confetti */
+.confetti{
+  position:fixed;
+  width:8px;
+  height:8px;
+  background:red;
+  animation:fall 3s linear forwards;
 }
 
-#musicToggle {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    font-size: 28px;
-    cursor: pointer;
-    z-index: 1000;
+@keyframes fall{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(100vh);}
 }
 
-.made-with-love {
-    position: fixed;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.9rem;
-    color: #777;
+/* Romantic zoom */
+.zoom{
+  animation:zoomIn 3s ease forwards;
 }
 
-    .glow {
-  animation: glowPulse 1.5s infinite;
+@keyframes zoomIn{
+  from{transform:scale(1);}
+  to{transform:scale(1.1);}
 }
-
-@keyframes glowPulse {
-  0% { box-shadow: 0 0 5px #ff4da6; }
-  50% { box-shadow: 0 0 20px #ff4da6; }
-  100% { box-shadow: 0 0 5px #ff4da6; }
-}
-
-#musicHint {
-  position: fixed;
-  top: 60px;
-  right: 20px;
-  font-size: 14px;
-  color: #ff4da6;
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.3; }
-  100% { opacity: 1; }
-}
-
 </style>
 </head>
-
 <body>
 
-<div class="container">
-    <h1 class="header_text">Will you be my valentine? Radha 💕</h1>
-
-    <div class="gif_container">
-        <img src="https://64.media.tumblr.com/44437aaa3af65ef5b5dc25b2cf1e81d1/6acc7d78ea83e207-45/s400x600/5b30035952803850ed3136fbe760ceff97ee8d19.gif">
-    </div>
-
-    <div class="buttons">
-        <button class="btn" id="yesButton" onclick="nextPage()">Yes</button>
-        <button class="btn" id="noButton" onclick="moveButton()">No</button>
-    </div>
+<!-- PAGE 1 -->
+<div id="page1" class="page active">
+  <h1>Will you be my valentine? Radha 💕</h1>
+  <img src="https://64.media.tumblr.com/44437aaa3af65ef5b5dc25b2cf1e81d1/6acc7d78ea83e207-45/s400x600/5b30035952803850ed3136fbe760ceff97ee8d19.gif" width="250">
+  <div>
+    <button class="btn" id="yesButton">Yes</button>
+    <button class="btn" id="noButton">No</button>
+  </div>
 </div>
 
-<p class="made-with-love">
-Made with love and chaos by Dhaval 💖✨
-</p>
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+  <h1>Hoorayyyy!!! 💖</h1>
+  <img src="https://i.gifer.com/Pak.gif" width="280">
+  <p>You're now Dhaval's gf 💕</p>
+</div>
 
+<!-- MUSIC -->
 <audio id="bgMusic" loop>
-    <source src="perfect.mp3" type="audio/mpeg">
+  <source src="perfect.mp3" type="audio/mpeg">
 </audio>
-<div id="musicHint">Tap here to start music 🎵</div>
-<button id="musicToggle" class="glow">🔊</button>
+
+<div id="musicToggle" class="glow">🔊</div>
+
+<script>
+const music=document.getElementById("bgMusic");
+const toggle=document.getElementById("musicToggle");
+const yes=document.getElementById("yesButton");
+const no=document.getElementById("noButton");
+const page1=document.getElementById("page1");
+const page2=document.getElementById("page2");
+
+let yesScale=1;
+let noCount=0;
+
+/* MUSIC */
+toggle.addEventListener("click",()=>{
+  if(music.paused){
+    music.currentTime=70;
+    music.volume=0.3;
+    music.play();
+    toggle.classList.remove("glow");
+  }else{
+    music.pause();
+  }
+});
+
+/* HEART RAIN */
+function createHeart(){
+  const heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerHTML="💖";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(15+Math.random()*20)+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),3000);
+}
+
+setInterval(createHeart,800);
+
+/* CONFETTI */
+function launchConfetti(){
+  for(let i=0;i<100;i++){
+    const conf=document.createElement("div");
+    conf.className="confetti";
+    conf.style.left=Math.random()*100+"vw";
+    conf.style.background=`hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(conf);
+    setTimeout(()=>conf.remove(),3000);
+  }
+}
+
+/* YES BUTTON */
+yes.addEventListener("click",()=>{
+  navigator.vibrate?.([200,100,200]);
+
+  page1.classList.remove("active");
+  page2.classList.add("active");
+  page2.classList.add("zoom");
+
+  launchConfetti();
+
+  // Romantic volume increase
+  let fade=setInterval(()=>{
+    if(music.volume<0.7){
+      music.volume+=0.03;
+    }else{
+      clearInterval(fade);
+    }
+  },200);
+});
+
+/* NO BUTTON */
+no.addEventListener("click",()=>{
+  navigator.vibrate?.(100);
+
+  noCount++;
+  const x=Math.random()*(window.innerWidth-100);
+  const y=Math.random()*(window.innerHeight-50);
+
+  no.style.position="fixed";
+  no.style.left=x+"px";
+  no.style.top=y+"px";
+
+  yesScale+=0.15;
+  yes.style.transform=`scale(${yesScale})`;
+});
+</script>
+
 </body>
 </html>
+
