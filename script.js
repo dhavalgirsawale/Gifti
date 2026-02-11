@@ -1,86 +1,113 @@
+document.addEventListener("DOMContentLoaded", function () {
+
 const yesButton = document.getElementById("yesButton");
 const noButton = document.getElementById("noButton");
+const music = document.getElementById("bgMusic");
+const toggleBtn = document.getElementById("musicToggle");
 
 let yesScale = 1;
 let noCount = 0;
 const maxNo = 10;
+let isPlaying = false;
 
-const noMessages = [
-    "Are you sure? 🥺",
-    "Think again 😏",
-    "Nope 😈",
-    "You can't escape 😜",
-    "Still no? 😭",
-    "Last chance 💖",
-    "Wrong choice 😬",
-    "Just say yes 😌",
-    "Why fighting it? 😏",
-    "Okay this is awkward 😵"
-];
+/* ================= MUSIC SYSTEM ================= */
 
-function nextPage() {
-    if (navigator.vibrate) {
-        navigator.vibrate([200, 100, 200, 100, 300]);
+if (music) {
+
+    function fadeInAudio() {
+        music.volume = 0;
+        music.currentTime = 70; // start from 1:10
+        music.play().catch(() => {});
+        isPlaying = true;
+
+        const fade = setInterval(() => {
+            if (music.volume < 1) {
+                music.volume += 0.05;
+            } else {
+                clearInterval(fade);
+            }
+        }, 200);
     }
 
-    for (let i = 0; i < 25; i++) {
-        createHeart();
+    // Start music on first user interaction (mobile safe)
+    document.body.addEventListener("click", function initMusic() {
+        if (!isPlaying) {
+            fadeInAudio();
+            if (toggleBtn) toggleBtn.innerText = "🔊";
+        }
+        document.body.removeEventListener("click", initMusic);
+    });
+
+    // Toggle button
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            navigator.vibrate?.(100);
+
+            if (music.paused) {
+                music.play();
+                toggleBtn.innerText = "🔊";
+            } else {
+                music.pause();
+                toggleBtn.innerText = "🔇";
+            }
+        });
     }
+}
+
+/* ================= BUTTON LOGIC ================= */
+
+window.nextPage = function () {
+    navigator.vibrate?.([200,100,200]);
+
+    for (let i = 0; i < 25; i++) createHeart();
 
     setTimeout(() => {
         window.location.href = "yes.html";
     }, 800);
-}
+};
 
-function moveButton() {
+window.moveButton = function () {
+    navigator.vibrate?.(150);
+
+    if (!noButton) return;
+
     if (noCount >= maxNo) {
         noButton.innerText = "NO is disabled 😌";
         noButton.disabled = true;
-        noButton.style.cursor = "default";
         return;
     }
 
     noCount++;
 
-    if (navigator.vibrate) {
-        navigator.vibrate([100, 50, 100]);
-    }
-
     document.body.classList.add("shake");
-    setTimeout(() => {
-        document.body.classList.remove("shake");
-    }, 400);
+    setTimeout(() => document.body.classList.remove("shake"), 400);
 
-    // Keep NO button inside viewport
-    const padding = 20;
-    const maxX = window.innerWidth - noButton.offsetWidth - padding;
-    const maxY = window.innerHeight - noButton.offsetHeight - padding;
+    const padding = 40;
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
+    const x = Math.random() * (vw - noButton.offsetWidth - padding);
+    const y = Math.random() * (vh - noButton.offsetHeight - padding);
 
-    noButton.style.position = "absolute";
+    noButton.style.position = "fixed";
     noButton.style.left = `${x}px`;
     noButton.style.top = `${y}px`;
 
-    // YES grows every NO
-    yesScale += 0.15;
-    yesButton.style.transform = `scale(${yesScale})`;
-
-    // Update NO text
-    noButton.innerText =
-        noMessages[Math.min(noCount - 1, noMessages.length - 1)];
-}
+    if (yesButton) {
+        yesScale += 0.15;
+        yesButton.style.transform = `scale(${yesScale})`;
+    }
+};
 
 function createHeart() {
     const heart = document.createElement("div");
     heart.className = "heart";
     heart.innerText = "💖";
-
     heart.style.left = Math.random() * window.innerWidth + "px";
     heart.style.bottom = "20px";
-
     document.body.appendChild(heart);
-
     setTimeout(() => heart.remove(), 1500);
 }
+
+});
