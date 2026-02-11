@@ -8,67 +8,124 @@ const toggleBtn = document.getElementById("musicToggle");
 let yesScale = 1;
 let noCount = 0;
 const maxNo = 10;
-let isPlaying = false;
+
+/* ================= PAGE DETECTION ================= */
+
+const currentPage = window.location.pathname.includes("yes");
 
 /* ================= MUSIC SYSTEM ================= */
 
 if (music) {
 
-    function fadeInAudio() {
-        music.volume = 0;
-        music.currentTime = 70; // start from 1:10
-        music.play().catch(() => {});
-        isPlaying = true;
+    const savedTime = localStorage.getItem("musicTime");
+    const wasPlaying = localStorage.getItem("musicPlaying");
 
-        const fade = setInterval(() => {
-            if (music.volume < 1) {
-                music.volume += 0.05;
-            } else {
-                clearInterval(fade);
-            }
-        }, 200);
+    if (savedTime) {
+        music.currentTime = parseFloat(savedTime);
+    } else {
+        music.currentTime = 70; // start from 1:10 first time
     }
 
-    // Start music on first user interaction (mobile safe)
-    document.body.addEventListener("click", function initMusic() {
-        if (!isPlaying) {
-            fadeInAudio();
-            if (toggleBtn) toggleBtn.innerText = "🔊";
-        }
-        document.body.removeEventListener("click", initMusic);
-    });
+    // 🎵 Index Page Volume (soft)
+    if (!currentPage) {
+        music.volume = 0.25;
+    }
 
-    // Toggle button
+    // 💖 Yes Page Romantic Volume
+    if (currentPage) {
+        music.volume = 0;
+    }
+
+    if (wasPlaying !== "false") {
+        music.play().then(() => {
+
+            // Romantic volume increase on YES page
+            if (currentPage) {
+                fadeInToRomantic();
+            }
+
+        }).catch(()=>{});
+        localStorage.setItem("musicPlaying", "true");
+        if(toggleBtn) toggleBtn.innerText = "🔊";
+    }
+
+    // Save time continuously
+    setInterval(() => {
+        localStorage.setItem("musicTime", music.currentTime);
+    }, 1000);
+
+    // Speaker Toggle
     if (toggleBtn) {
         toggleBtn.addEventListener("click", function (e) {
             e.stopPropagation();
-            navigator.vibrate?.(100);
+            navigator.vibrate?.(80);
 
             if (music.paused) {
                 music.play();
                 toggleBtn.innerText = "🔊";
+                localStorage.setItem("musicPlaying", "true");
             } else {
                 music.pause();
                 toggleBtn.innerText = "🔇";
+                localStorage.setItem("musicPlaying", "false");
             }
         });
     }
+
+    // First tap start (mobile safe)
+    document.body.addEventListener("click", function initMusic() {
+        if (music.paused && localStorage.getItem("musicPlaying") !== "false") {
+            music.play().catch(()=>{});
+            localStorage.setItem("musicPlaying", "true");
+            if(toggleBtn) toggleBtn.innerText = "🔊";
+        }
+        document.body.removeEventListener("click", initMusic);
+    });
+}
+
+/* ================= FADE FUNCTIONS ================= */
+
+function fadeOutBeforeYes(callback) {
+    let fade = setInterval(() => {
+        if (music.volume > 0.05) {
+            music.volume -= 0.05;
+        } else {
+            clearInterval(fade);
+            callback();
+        }
+    }, 120);
+}
+
+function fadeInToRomantic() {
+    let fade = setInterval(() => {
+        if (music.volume < 0.6) {   // romantic louder volume
+            music.volume += 0.05;
+        } else {
+            clearInterval(fade);
+        }
+    }, 200);
 }
 
 /* ================= BUTTON LOGIC ================= */
 
 window.nextPage = function () {
+
     navigator.vibrate?.([200,100,200]);
 
-    for (let i = 0; i < 25; i++) createHeart();
+    localStorage.setItem("musicPlaying", "true");
 
-    setTimeout(() => {
+    if (music) {
+        fadeOutBeforeYes(() => {
+            window.location.href = "yes.html";
+        });
+    } else {
         window.location.href = "yes.html";
-    }, 800);
+    }
 };
 
 window.moveButton = function () {
-    navigator.vibrate?.(150);
+
+    navigator.vibrate?.(120);
 
     if (!noButton) return;
 
@@ -99,15 +156,5 @@ window.moveButton = function () {
         yesButton.style.transform = `scale(${yesScale})`;
     }
 };
-
-function createHeart() {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerText = "💖";
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.bottom = "20px";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 1500);
-}
 
 });
