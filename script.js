@@ -1,134 +1,111 @@
 const music = document.getElementById("bgMusic");
-const toggleBtn = document.getElementById("musicToggle");
-const yesButton = document.getElementById("yesButton");
-const noButton = document.getElementById("noButton");
+const toggle = document.getElementById("musicToggle");
+const yesBtn = document.getElementById("yesButton");
+const noBtn = document.getElementById("noButton");
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
 
 let yesScale = 1;
 let noCount = 0;
-const maxNo = 10;
-
-const isYesPage = window.location.pathname.includes("yes.html");
 
 /* ================= MUSIC SYSTEM ================= */
 
-if (music) {
+toggle.addEventListener("click", () => {
 
-    // Restore time
-    const savedTime = localStorage.getItem("musicTime");
-    if (savedTime) {
-        music.currentTime = parseFloat(savedTime);
-    } else {
-        music.currentTime = 70; // start from 1:10 first time
-    }
+    if (music.paused) {
 
-    // Volume settings
-    music.volume = isYesPage ? 0 : 0.25;
-
-    // Start on first user interaction
-    function startMusic() {
-        music.play().then(() => {
-
-            // Romantic increase on YES page
-            if (isYesPage) {
-                fadeInRomantic();
-            }
-
-            localStorage.setItem("musicPlaying", "true");
-            if (toggleBtn) toggleBtn.innerText = "🔊";
-
-        }).catch(()=>{});
-
-        document.removeEventListener("click", startMusic);
-    }
-
-    document.addEventListener("click", startMusic);
-
-    // Save current time every second
-    setInterval(() => {
-        localStorage.setItem("musicTime", music.currentTime);
-    }, 1000);
-
-    // Toggle sound
-    if (toggleBtn) {
-        toggleBtn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            navigator.vibrate?.(80);
-
-            if (music.paused) {
-                music.play();
-                toggleBtn.innerText = "🔊";
-            } else {
-                music.pause();
-                toggleBtn.innerText = "🔇";
-            }
-        });
-    }
-}
-
-/* ================= FADE EFFECTS ================= */
-
-function fadeOut(callback) {
-    let fade = setInterval(() => {
-        if (music.volume > 0.05) {
-            music.volume -= 0.05;
-        } else {
-            clearInterval(fade);
-            callback();
+        // Start from 1:10 only first time
+        if (!music.dataset.started) {
+            music.currentTime = 70; // 1 minute 10 seconds
+            music.dataset.started = "true";
         }
-    }, 100);
+
+        music.volume = 0.3;
+        music.play();
+        toggle.classList.remove("glow");
+
+    } else {
+        music.pause();
+    }
+});
+
+
+/* ================= HEART RAIN ================= */
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (15 + Math.random() * 20) + "px";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 3000);
 }
 
-function fadeInRomantic() {
+setInterval(createHeart, 800);
+
+
+/* ================= CONFETTI ================= */
+
+function launchConfetti() {
+    for (let i = 0; i < 120; i++) {
+
+        const conf = document.createElement("div");
+        conf.className = "confetti";
+
+        conf.style.left = Math.random() * 100 + "vw";
+        conf.style.background = `hsl(${Math.random() * 360},100%,50%)`;
+
+        document.body.appendChild(conf);
+
+        setTimeout(() => conf.remove(), 3000);
+    }
+}
+
+
+/* ================= YES BUTTON ================= */
+
+yesBtn.addEventListener("click", () => {
+
+    navigator.vibrate?.([200, 100, 200]);
+
+    // Page transition
+    page1.classList.remove("active");
+    page2.classList.add("active");
+    page2.classList.add("zoom");
+
+    // Confetti blast
+    launchConfetti();
+
+    // Romantic volume increase
     let fade = setInterval(() => {
-        if (music.volume < 0.6) {
-            music.volume += 0.05;
+        if (music.volume < 0.7) {
+            music.volume += 0.03;
         } else {
             clearInterval(fade);
         }
     }, 200);
-}
 
-/* ================= BUTTON LOGIC ================= */
+});
 
-function nextPage() {
-    navigator.vibrate?.([200,100,200]);
 
-    if (music) {
-        fadeOut(() => {
-            window.location.href = "yes.html";
-        });
-    } else {
-        window.location.href = "yes.html";
-    }
-}
+/* ================= NO BUTTON ================= */
 
-function moveButton() {
+noBtn.addEventListener("click", () => {
 
-    navigator.vibrate?.(120);
-
-    if (!noButton) return;
-
-    if (noCount >= maxNo) {
-        noButton.innerText = "NO is disabled 😌";
-        noButton.disabled = true;
-        return;
-    }
+    navigator.vibrate?.(100);
 
     noCount++;
 
-    const padding = 40;
-    const vw = document.documentElement.clientWidth;
-    const vh = document.documentElement.clientHeight;
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
 
-    const x = Math.random() * (vw - noButton.offsetWidth - padding);
-    const y = Math.random() * (vh - noButton.offsetHeight - padding);
+    noBtn.style.position = "fixed";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
 
-    noButton.style.position = "fixed";
-    noButton.style.left = `${x}px`;
-    noButton.style.top = `${y}px`;
-
-    if (yesButton) {
-        yesScale += 0.15;
-        yesButton.style.transform = `scale(${yesScale})`;
-    }
-}
+    yesScale += 0.15;
+    yesBtn.style.transform = `scale(${yesScale})`;
+});
